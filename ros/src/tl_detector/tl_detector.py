@@ -17,7 +17,7 @@ STATE_COUNT_THRESHOLD = 3
 
 class TLDetector(object):
     def __init__(self):
-        rospy.init_node('tl_detector')
+        rospy.init_node('tl_detector', log_level=rospy.DEBUG)
 
         self.pose = None
         self.waypoints = None
@@ -62,7 +62,6 @@ class TLDetector(object):
     def waypoints_cb(self, waypoints):
         self.waypoints = waypoints
         if not self.waypoints_2D:
-            rospy.logdebug("waypoints_cb!!")
             self.waypoints_2D=[[waypoint.pose.pose.position.x,waypoint.pose.pose.position.y] for waypoint in waypoints.waypoints]
             self.waypoints_tree=KDTree(self.waypoints_2D)
             self.total_waypoints_count = len(self.waypoints_2D)
@@ -96,8 +95,11 @@ class TLDetector(object):
             light_wp = light_wp if state == TrafficLight.RED else -1
             self.last_wp = light_wp
             self.upcoming_red_light_pub.publish(Int32(light_wp))
+            rospy.logdebug("new red light!!  closest_light_wp =  %s", light_wp)
+
         else:
             self.upcoming_red_light_pub.publish(Int32(self.last_wp))
+
         self.state_count += 1
 
     def get_closest_waypoint(self, x,y):
@@ -151,7 +153,9 @@ class TLDetector(object):
         stop_line_positions = self.config['stop_line_positions']
 
         if(self.pose):
-            car_position_wp = self.get_closest_waypoint(self.pose.pose)
+            car_position_wp = self.get_closest_waypoint(self.pose.pose.position.x, self.pose.pose.position.y)
+            rospy.logdebug("latest car_position_wp  %d", car_position_wp)
+
 
         min_diff = self.total_waypoints_count
         for i,cur_light in enumerate(self.lights):
@@ -166,6 +170,7 @@ class TLDetector(object):
 
         if closest_light:
             state = self.get_light_state(closest_light)
+
             return closest_light_wp, state
         return -1, TrafficLight.UNKNOWN
 
