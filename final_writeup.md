@@ -92,6 +92,15 @@ x direction linear velocity of the first waypoint:
 my_lane_msg[0].twist.twist.linear.x
 ```
 
+run Jupyter notebook: https://jupyter.readthedocs.io/en/latest/running.html#running
+```
+jupyter notebook
+pip install tensorflow==1.4
+conda activate carnd-advdl-odlab
+conda env list
+conda deactivate
+```
+
 
 # errors encountered
 No module named terminal_color
