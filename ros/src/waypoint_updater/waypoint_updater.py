@@ -23,7 +23,7 @@ as well as to verify your TL classifier.
 TODO (for Yousuf and Aaron): Stopline location for each traffic light.
 '''
 
-LOOKAHEAD_WPS = 200 # Number of waypoints we will publish. You can change this number
+LOOKAHEAD_WPS = 50 # Number of waypoints we will publish. You can change this number
 
 
 class WaypointUpdater(object):
@@ -33,6 +33,7 @@ class WaypointUpdater(object):
         self.base_waypoints = None
         self.current_position = None
         self.total_waypoints_count = 0
+        self.count = 0
         rospy.init_node('waypoint_updater', log_level=rospy.DEBUG)
 
         rospy.Subscriber('/current_pose', PoseStamped, self.pose_cb)
@@ -56,7 +57,6 @@ class WaypointUpdater(object):
     def waypoints_cb(self, waypoints):
         self.base_waypoints = waypoints
         if not self.waypoints_2D:
-            rospy.logdebug("waypoints_cb!!")
             self.waypoints_2D=[[waypoint.pose.pose.position.x,waypoint.pose.pose.position.y] for waypoint in waypoints.waypoints]
             self.waypoints_tree=KDTree(self.waypoints_2D)
             self.total_waypoints_count = len(self.waypoints_2D)
@@ -88,7 +88,9 @@ class WaypointUpdater(object):
         rate=rospy.Rate(50)
         while not rospy.is_shutdown():
             if self.current_position and self.base_waypoints:
-                self.publish_finaly_waypoints()
+                if self.count % 3 == 0:
+                    self.publish_finaly_waypoints()
+                self.count += 1
             rate.sleep()
 
     def publish_finaly_waypoints(self):
@@ -97,6 +99,8 @@ class WaypointUpdater(object):
         car_y=self.current_position.pose.position.y
         if self.waypoints_tree:
             closest_indx=self.waypoints_tree.query([car_x,car_y],1)[1]
+            rospy.logdebug("waypoints_updater - car closest_idx = %d",closest_indx )
+
             closest_cord=self.waypoints_2D[closest_indx]
             previous_cord=self.waypoints_2D[(closest_indx-1)% self.total_waypoints_count]
 
