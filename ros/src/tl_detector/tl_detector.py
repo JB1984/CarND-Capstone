@@ -155,6 +155,7 @@ class TLDetector(object):
             cv_image = self.bridge.imgmsg_to_cv2(self.camera_image, "bgr8")
             file_name = str(line_wp_idx)+'_'+str(light.state)
             if file_name not in self.saved_files:
+                self.saved_files.add(file_name)
                 rospy.logdebug("writing traffic light ahead state = %d; idx=%d ", light.state,line_wp_idx)
                 cv2.imwrite('../../../imgs/red_lights/'+file_name+'.png',cv_image)
         if closest_light:
