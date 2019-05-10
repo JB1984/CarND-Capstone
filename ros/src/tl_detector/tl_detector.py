@@ -26,6 +26,7 @@ class TLDetector(object):
         self.waypoints_2d = None
         self.waypoint_tree = None
         self.saved_files = Set([])
+        self.img_cnt = 0
 
         sub1 = rospy.Subscriber('/current_pose', PoseStamped, self.pose_cb)
         sub2 = rospy.Subscriber('/base_waypoints', Lane, self.waypoints_cb)
@@ -150,14 +151,16 @@ class TLDetector(object):
                 diff = d
                 closest_light = light
                 line_wp_idx = temp_wp_idx
-        if light.state != 4:
+        # if light.state != 4:
             # rospy.logdebug("traffic light ahead state = %d; idx=%d ", light.state,line_wp_idx)
-            cv_image = self.bridge.imgmsg_to_cv2(self.camera_image, "bgr8")
-            file_name = str(line_wp_idx)+'_'+str(light.state)
-            if file_name not in self.saved_files:
-                self.saved_files.add(file_name)
-                rospy.logdebug("writing traffic light ahead state = %d; idx=%d ", light.state,line_wp_idx)
-                cv2.imwrite('../../../imgs/red_lights/'+file_name+'.png',cv_image)
+        cv_image = self.bridge.imgmsg_to_cv2(self.camera_image, "bgr8")
+        # file_name = str(line_wp_idx)+'_'+str(light.state)
+        file_name = str(self.img_cnt)
+        self.img_cnt += 1
+#             if file_name not in self.saved_files:
+        self.saved_files.add(file_name)
+        rospy.logdebug("writing traffic light ahead state = %d; idx=%d ", light.state,line_wp_idx)
+        cv2.imwrite('../../../imgs/red_lights/'+file_name+'.png',cv_image)
         if closest_light:
             state = self.get_light_state(closest_light)
             return line_wp_idx, state

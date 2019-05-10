@@ -109,3 +109,8 @@ cd ros
 catkin_make; source devel/setup.sh; roslaunch launch/styx.launch
 
 ```
+
+docker:
+```
+docker run -p 4567:4567 -v "$PWD:/capstone" -v /tmp/log:/root/.ros/ --rm -it capstone
+```
