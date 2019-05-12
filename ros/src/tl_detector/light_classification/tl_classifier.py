@@ -31,7 +31,10 @@ class TLClassifier(object):
 
         rospy.logdebug('####image_path result = %s',image_path)
 
-        img_binary = cv2.imread(image_path)
+        # img_binary = cv2.imread(image_path)
+        img_binary = Image.open(image_path)
+
+        # img_binary=Image.open(image_path)
         # image = cv2.cvtColor(img_binary, cv2.COLOR_BGR2RGB)
         self.get_classification(img_binary)
 

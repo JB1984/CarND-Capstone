@@ -24,10 +24,10 @@ class TLClassifier(object):
 
         # The classification of the object (integer id).
         self.detection_classes = self.detection_graph.get_tensor_by_name('detection_classes:0')
-        image_path = os.path.join('/Users/liyingcmu/Documents/workspace/udacity/tensor_flow/capstone_aurora/ros/src/tl_detector/models/camera_images', '3.0_601.png')
-        # image = Image.open(image_path)
+        image_path = '../models/camera_images/3.0_601.png'
+        img_binary = Image.open(image_path)
 
-        img_binary = cv2.imread(image_path)
+        # img_binary = cv2.imread(image_path)
         # image = cv2.cvtColor(img_binary, cv2.COLOR_BGR2RGB)
         self.get_classification(img_binary)
 
