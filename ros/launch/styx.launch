@@ -20,8 +20,8 @@
 
     <!--Traffic Light Locations and Camera Config -->
     <param name="traffic_light_config" textfile="$(find tl_detector)/sim_traffic_light_config.yaml" />
-    <param name="sim_model" binfile="$(find tl_detector)/models/ssd_sim/frozen_inference_graph.pb" />
-    <param name="udacity_model" binfile="$(find tl_detector)/models/ssd_udacity/frozen_inference_graph.pb" />
+    <!--Camera Classification models -->
+    <param name="site_model_path" value="$(find tl_detector)/models/ssd_udacity/frozen_inference_graph.pb" />
     <param name="sim_model_path" value="$(find tl_detector)/models/ssd_sim/frozen_inference_graph.pb" />
     <param name="test_image" value="$(find tl_detector)/models/camera_images/2.0_742.png" />
 </launch>

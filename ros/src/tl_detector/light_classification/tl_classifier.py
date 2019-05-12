@@ -8,12 +8,13 @@ import cv2
 
 
 class TLClassifier(object):
-    def __init__(self):
+    def __init__(self, is_site):
         #TODO load classifier
-        self.SSD_GRAPH_FILE_PATH = rospy.get_param('~/sim_model_path', "not found")
-        self.SSD_TESTAREA_FILE = 'models/ssd_udacity/frozen_inference_graph.pb'
-        sim_model_path = rospy.get_param('~/sim_model_path', "not found")
-        rospy.logdebug('####SSD_GRAPH_FILE_PATH read = %s',self.SSD_GRAPH_FILE_PATH)
+        if is_site:
+            self.SSD_GRAPH_FILE_PATH = rospy.get_param('~/site_model_path', "not found")
+        else:
+            self.SSD_GRAPH_FILE_PATH = rospy.get_param('~/sim_model_path', "not found")
+        rospy.logdebug('#### is_site %s? SSD_GRAPH_FILE_PATH read = %s',is_site, self.SSD_GRAPH_FILE_PATH)
 
         self.detection_graph = self.load_graph(self.SSD_GRAPH_FILE_PATH)
         self.image_tensor = self.detection_graph.get_tensor_by_name('image_tensor:0')
@@ -27,17 +28,6 @@ class TLClassifier(object):
 
         # The classification of the object (integer id).
         self.detection_classes = self.detection_graph.get_tensor_by_name('detection_classes:0')
-        image_path= rospy.get_param('~/test_image', "not found")
-
-        rospy.logdebug('####image_path result = %s',image_path)
-
-        # img_binary = cv2.imread(image_path)
-        img_binary = Image.open(image_path)
-
-        # img_binary=Image.open(image_path)
-        # image = cv2.cvtColor(img_binary, cv2.COLOR_BGR2RGB)
-        self.get_classification(img_binary)
-
 
 
     def filter_boxes(self,min_score, boxes, scores, classes):

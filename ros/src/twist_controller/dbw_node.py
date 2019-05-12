@@ -80,18 +80,14 @@ class DBWNode(object):
     def twist_cmd_cb(self, msg):
         self.target_linear_vel = msg.twist.linear.x
         self.target_angular_vel = msg.twist.angular.z
-        rospy.logdebug("twist_cmd_cb!! msg.twist.angular")
-        rospy.logdebug( msg.twist.angular)
         pass
 
     def current_velocity_cb(self, msg):
         self.current_vel = msg.twist.linear.x
-        rospy.logdebug("current_velocity_cb!!")
         self.current_position = msg
         pass
 
     def dbw_enabled_cb(self, msg):
-        rospy.logdebug("dbw_enabled_cb!!")
         self.dbw_enabled = msg
         pass
 
