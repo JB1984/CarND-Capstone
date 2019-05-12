@@ -7,8 +7,11 @@ from PIL import Image
 class TLClassifier(object):
     def __init__(self):
         #TODO load classifier
-        self.SSD_GRAPH_FILE = './models/ssd_sim/frozen_inference_graph.pb'
-        self.SSD_TESTAREA_FILE = './models/ssd_udacity/frozen_inference_graph.pb'
+        self.SSD_GRAPH_FILE = rospy.get_param("/sim_model")
+        self.SSD_TESTAREA_FILE = 'models/ssd_udacity/frozen_inference_graph.pb'
+        image_path = rospy.get_param("/test_image")
+        image = Image.open(image_path)
+
         self.detection_graph = self.load_graph(self.SSD_GRAPH_FILE)
         self.image_tensor = self.detection_graph.get_tensor_by_name('image_tensor:0')
 
@@ -46,6 +49,11 @@ class TLClassifier(object):
                 serialized_graph = fid.read()
                 od_graph_def.ParseFromString(serialized_graph)
                 tf.import_graph_def(od_graph_def, name='')
+        # with open(graph_file, 'rb') as f:
+        #     serialized = f.read()
+        #     detector_graph_def = tf.GraphDef()
+        #     detector_graph_def.ParseFromString(serialized)
+        #     tf.import_graph_def(detector_graph_def, name='detector')
         return graph
 
     def get_classification(self, image):
