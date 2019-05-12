@@ -42,11 +42,6 @@ class TLDetector(object):
 
         self.bridge = CvBridge()
         self.light_classifier = TLClassifier()
-        ## test classifer
-        test_cv_image = cv2.imread('../../../camera_images/0.0_285.png',0)
-        result = self.light_classifier.get_classification(test_cv_image)
-        rospy.logdebug('classification result = %d',result)
-
         self.listener = tf.TransformListener()
 
         self.state = TrafficLight.UNKNOWN
