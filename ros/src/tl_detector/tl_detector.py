@@ -132,6 +132,8 @@ class TLDetector(object):
             int: ID of traffic light color (specified in styx_msgs/TrafficLight)
 
         """
+        rospy.logdebug('#### img_cb->process_traffic_lights')
+
         light = None
 
         # List of positions that correspond to the line to stop in front of for a given intersection
