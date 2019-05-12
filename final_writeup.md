@@ -101,6 +101,7 @@ my_lane_msg[0].twist.twist.linear.x
 No module named terminal_color
 ```
 pip install --upgrade catkin_pkg
+python<x> -m pip install <package>
 ```
 
 ERROR: Unable to communicate with master!

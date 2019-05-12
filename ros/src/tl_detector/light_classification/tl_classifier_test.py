@@ -1,21 +1,18 @@
-from styx_msgs.msg import TrafficLight
 import tensorflow as tf
 import numpy as np
 from PIL import Image
-import rospy
 import os
 import cv2
 
-
+#python tl_classifier_test.py
 class TLClassifier(object):
     def __init__(self):
         #TODO load classifier
-        self.SSD_GRAPH_FILE_PATH = rospy.get_param('~/sim_model_path', "not found")
-        self.SSD_TESTAREA_FILE = 'models/ssd_udacity/frozen_inference_graph.pb'
-        sim_model_path = rospy.get_param('~/sim_model_path', "not found")
-        rospy.logdebug('####SSD_GRAPH_FILE_PATH read = %s',self.SSD_GRAPH_FILE_PATH)
-
-        self.detection_graph = self.load_graph(self.SSD_GRAPH_FILE_PATH)
+        self.SSD_SIM_FILE_PATH = '../models/ssd_sim/frozen_inference_graph.pb'
+        self.SSD_TESTAREA_FILE = '../models/ssd_udacity/frozen_inference_graph.pb'
+        print('TLClassifier')
+        # sim_model_path = rospy.get_param('~/sim_model_path', "not found")
+        self.detection_graph = self.load_graph(self.SSD_SIM_FILE_PATH)
         self.image_tensor = self.detection_graph.get_tensor_by_name('image_tensor:0')
 
         # Each box represents a part of the image where a particular object was detected.
@@ -27,9 +24,8 @@ class TLClassifier(object):
 
         # The classification of the object (integer id).
         self.detection_classes = self.detection_graph.get_tensor_by_name('detection_classes:0')
-        image_path= rospy.get_param('~/test_image', "not found")
-
-        rospy.logdebug('####image_path result = %s',image_path)
+        image_path = os.path.join('/Users/liyingcmu/Documents/workspace/udacity/tensor_flow/capstone_aurora/ros/src/tl_detector/models/camera_images', '3.0_601.png')
+        # image = Image.open(image_path)
 
         img_binary = cv2.imread(image_path)
         # image = cv2.cvtColor(img_binary, cv2.COLOR_BGR2RGB)
@@ -77,6 +73,9 @@ class TLClassifier(object):
             int: ID of traffic light color (specified in styx_msgs/TrafficLight)
 
         """
+        # image_path = rospy.get_param("/test_image")
+        # image = Image.open(image_path)
+
         image_np = np.expand_dims(np.asarray(image, dtype=np.uint8), 0)
         # image_np = np.expand_dims(image, axis=0)
         with tf.Session(graph=self.detection_graph) as sess:
@@ -104,13 +103,18 @@ class TLClassifier(object):
             # plt.figure(figsize=(12, 8))
             # plt.imshow(image)
             if len(classes) == 0:
-                return TrafficLight.UNKNOWN
+                return "TrafficLight.UNKNOWN"
             switcher = {
-                1: TrafficLight.GREEN,
-                2: TrafficLight.RED,
-                3: TrafficLight.YELLOW,
+                1: "TrafficLight.GREEN",
+                2: "TrafficLight.RED",
+                3: "TrafficLight.YELLOW",
                 }
 
-            class_result = switcher.get(classes[0], TrafficLight.UNKNOWN)
-            rospy.logdebug('####classification class = %d', class_result)
+            class_result = switcher.get(classes[0], "TrafficLight.UNKNOWN")
+            print('####classification class = %d', class_result)
             return class_result
+
+
+
+if __name__ == '__main__':
+    TLClassifier()
