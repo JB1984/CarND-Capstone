@@ -70,6 +70,8 @@ class TLClassifier(object):
             int: ID of traffic light color (specified in styx_msgs/TrafficLight)
 
         """
+        rospy.logdebug('####get_classification begin')
+
         image_np = np.expand_dims(np.asarray(image, dtype=np.uint8), 0)
         # image_np = np.expand_dims(image, axis=0)
         with tf.Session(graph=self.detection_graph) as sess:
@@ -105,5 +107,5 @@ class TLClassifier(object):
                 }
 
             class_result = switcher.get(classes[0], TrafficLight.UNKNOWN)
-            rospy.logdebug('####classification class = %d', class_result)
+            rospy.logdebug('####get_classification end class = %d', class_result)
             return class_result
