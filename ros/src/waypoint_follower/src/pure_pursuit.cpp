@@ -30,7 +30,9 @@
 
 #include "pure_pursuit_core.h"
 
-constexpr int LOOP_RATE = 30; //processing frequency
+// set from 30 Hz (original Udacity Value) to 50 Hz to deal with
+// latency after a few minutes of driving
+constexpr int LOOP_RATE = 50; //processing frequency
 
 
 int main(int argc, char **argv)
