@@ -24,12 +24,25 @@ class TLClassifier(object):
 
         # The classification of the object (integer id).
         self.detection_classes = self.detection_graph.get_tensor_by_name('detection_classes:0')
-        image_path = '../models/camera_images/3.0_601.png'
-        img_binary = Image.open(image_path)
+        red_image_path = '../models/camera_images/red_0.png'
+        green_image_path = '../models/camera_images/green_2.png'
+        yellow_image_path = '../models/camera_images/yellow_1.png'
+        print('classfiy red')
+        img_binary = Image.open(red_image_path)
 
         # img_binary = cv2.imread(image_path)
         # image = cv2.cvtColor(img_binary, cv2.COLOR_BGR2RGB)
         self.get_classification(img_binary)
+        print('classfiy yellow')
+        img_binary = Image.open(yellow_image_path)
+        self.get_classification(img_binary)
+        
+        print('classfiy green')
+        img_binary = Image.open(green_image_path)
+        self.get_classification(img_binary)
+        
+        
+        
 
 
 
