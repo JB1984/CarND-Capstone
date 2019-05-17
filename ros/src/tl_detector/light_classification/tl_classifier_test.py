@@ -3,6 +3,7 @@ import numpy as np
 from PIL import Image
 import os
 import cv2
+import datetime
 
 #python tl_classifier_test.py
 class TLClassifier(object):
@@ -24,6 +25,7 @@ class TLClassifier(object):
 
         # The classification of the object (integer id).
         self.detection_classes = self.detection_graph.get_tensor_by_name('detection_classes:0')
+        self.sess = tf.Session(graph=self.detection_graph)
         red_image_path = '../models/camera_images/red_0.png'
         green_image_path = '../models/camera_images/green_2.png'
         yellow_image_path = '../models/camera_images/yellow_1.png'
@@ -36,13 +38,13 @@ class TLClassifier(object):
         print('classfiy yellow')
         img_binary = Image.open(yellow_image_path)
         self.get_classification(img_binary)
-        
+
         print('classfiy green')
         img_binary = Image.open(green_image_path)
         self.get_classification(img_binary)
-        
-        
-        
+
+
+
 
 
 
@@ -88,44 +90,47 @@ class TLClassifier(object):
         """
         # image_path = rospy.get_param("/test_image")
         # image = Image.open(image_path)
+        start = datetime.datetime.now()
 
         image_np = np.expand_dims(np.asarray(image, dtype=np.uint8), 0)
         # image_np = np.expand_dims(image, axis=0)
-        with tf.Session(graph=self.detection_graph) as sess:
+        # with tf.Session(graph=self.detection_graph) as sess:
             # Actual detection.
-            (boxes, scores, classes) = sess.run([self.detection_boxes, self.detection_scores, self.detection_classes],
-                                                feed_dict={self.image_tensor: image_np})
+        (boxes, scores, classes) = self.sess.run([self.detection_boxes, self.detection_scores, self.detection_classes],
+                                            feed_dict={self.image_tensor: image_np})
 
-            # Remove unnecessary dimensions
-            boxes = np.squeeze(boxes)
-            scores = np.squeeze(scores)
-            classes = np.squeeze(classes)
+        # Remove unnecessary dimensions
+        boxes = np.squeeze(boxes)
+        scores = np.squeeze(scores)
+        classes = np.squeeze(classes)
 
-            confidence_cutoff = 0.8
+        confidence_cutoff = 0.8
             # Filter boxes with a confidence score less than `confidence_cutoff`
-            boxes, scores, classes = self.filter_boxes(confidence_cutoff, boxes, scores, classes)
-            #
-            # # The current box coordinates are normalized to a range between 0 and 1.
-            # # This converts the coordinates actual location on the image.
-            # width, height = image.size
-            # box_coords = to_image_coords(boxes, height, width)
-            #
-            # # Each class with be represented by a differently colored box
-            # draw_boxes(image, box_coords, classes)
-            #
-            # plt.figure(figsize=(12, 8))
-            # plt.imshow(image)
-            if len(classes) == 0:
-                return "TrafficLight.UNKNOWN"
-            switcher = {
-                1: "TrafficLight.GREEN",
-                2: "TrafficLight.RED",
-                3: "TrafficLight.YELLOW",
-                }
+        boxes, scores, classes = self.filter_boxes(confidence_cutoff, boxes, scores, classes)
+        #
+        # # The current box coordinates are normalized to a range between 0 and 1.
+        # # This converts the coordinates actual location on the image.
+        # width, height = image.size
+        # box_coords = to_image_coords(boxes, height, width)
+        #
+        # # Each class with be represented by a differently colored box
+        # draw_boxes(image, box_coords, classes)
+        #
+        # plt.figure(figsize=(12, 8))
+        # plt.imshow(image)
+        if len(classes) == 0:
+            return "TrafficLight.UNKNOWN"
+        switcher = {
+            1: "TrafficLight.GREEN",
+            2: "TrafficLight.RED",
+            3: "TrafficLight.YELLOW",
+            }
 
-            class_result = switcher.get(classes[0], "TrafficLight.UNKNOWN")
-            print('####classification class = %d', class_result)
-            return class_result
+        class_result = switcher.get(classes[0], "TrafficLight.UNKNOWN")
+        print('####classification class = %d', class_result)
+        end = datetime.datetime.now()
+        print('-- total time', (end-start).total_seconds())
+        return class_result
 
 
 
