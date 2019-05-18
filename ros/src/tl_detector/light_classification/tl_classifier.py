@@ -29,10 +29,10 @@ class TLClassifier(object):
         # The classification of the object (integer id).
         self.detection_classes = self.detection_graph.get_tensor_by_name('detection_classes:0')
         self.sess = tf.Session(graph=self.detection_graph)
-        yellow_image_path = rospy.get_param('~/test_image_yellow', "not found")
-        print('classfiy yellow')
-        img_binary = Image.open(yellow_image_path)
-        self.get_classification(img_binary)
+        # yellow_image_path = rospy.get_param('~/test_image_yellow', "not found")
+        # print('classfiy yellow')
+        # img_binary = Image.open(yellow_image_path)
+        # self.get_classification(img_binary)
 
 
     def filter_boxes(self,min_score, boxes, scores, classes):
