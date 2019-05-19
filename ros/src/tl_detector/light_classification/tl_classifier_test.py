@@ -11,7 +11,9 @@ class TLClassifier(object):
         #TODO load classifier
         self.SSD_SIM_FILE_PATH = '../models/ssd_sim/frozen_inference_graph.pb'
         self.SSD_TESTAREA_FILE = '../models/ssd_udacity/frozen_inference_graph.pb'
-        print('TLClassifier')
+        test_color = "Unknown"
+        dir_path = '../alex-lechner-udacity-traffic-light-dataset/simulator_dataset_rgb/'+test_color
+
         # sim_model_path = rospy.get_param('~/sim_model_path', "not found")
         self.detection_graph = self.load_graph(self.SSD_SIM_FILE_PATH)
         self.image_tensor = self.detection_graph.get_tensor_by_name('image_tensor:0')
@@ -26,22 +28,41 @@ class TLClassifier(object):
         # The classification of the object (integer id).
         self.detection_classes = self.detection_graph.get_tensor_by_name('detection_classes:0')
         self.sess = tf.Session(graph=self.detection_graph)
-        red_image_path = '../models/camera_images/red_0.png'
-        green_image_path = '../models/camera_images/green_2.png'
-        yellow_image_path = '../models/camera_images/yellow_1.png'
-        print('classfiy red')
-        img_binary = Image.open(red_image_path)
+        # red_image_path = '../models/camera_images/red_0.png'
+        # green_image_path = '../models/camera_images/green_2.png'
+        # yellow_image_path = '../models/camera_images/yellow_1.png'
+        # print('classfiy red')
+        # img_binary = Image.open(red_image_path)
+        #
+        # # img_binary = cv2.imread(image_path)
+        # # image = cv2.cvtColor(img_binary, cv2.COLOR_BGR2RGB)
+        # self.get_classification(img_binary)
+        # print('classfiy yellow')
+        # img_binary = Image.open(yellow_image_path)
+        # self.get_classification(img_binary)
+        #
+        # print('classfiy green')
+        # img_binary = Image.open(green_image_path)
+        # self.get_classification(img_binary)
 
-        # img_binary = cv2.imread(image_path)
-        # image = cv2.cvtColor(img_binary, cv2.COLOR_BGR2RGB)
-        self.get_classification(img_binary)
-        print('classfiy yellow')
-        img_binary = Image.open(yellow_image_path)
-        self.get_classification(img_binary)
 
-        print('classfiy green')
-        img_binary = Image.open(green_image_path)
-        self.get_classification(img_binary)
+        cnt = 0
+        correct_cnt = 0
+        dirs = os.listdir(dir_path)
+        for file_name in dirs:
+            if not file_name.endswith('.png'):
+                continue
+            cnt += 1
+            file_path = '../alex-lechner-udacity-traffic-light-dataset/simulator_dataset_rgb/'+test_color+'/'+file_name
+            img_binary = Image.open(file_path)
+            class_result = self.get_classification(img_binary)
+            if class_result == "TrafficLight.UNKNOWN":
+                correct_cnt +=1
+            else:
+                print('!!!wrong',class_result,file_path)
+
+        print(test_color,"=======correct/cnt", correct_cnt, cnt)
+
 
 
 
@@ -90,7 +111,7 @@ class TLClassifier(object):
         """
         # image_path = rospy.get_param("/test_image")
         # image = Image.open(image_path)
-        start = datetime.datetime.now()
+        # start = datetime.datetime.now()
 
         image_np = np.expand_dims(np.asarray(image, dtype=np.uint8), 0)
         # image_np = np.expand_dims(image, axis=0)
@@ -107,6 +128,7 @@ class TLClassifier(object):
         confidence_cutoff = 0.8
             # Filter boxes with a confidence score less than `confidence_cutoff`
         boxes, scores, classes = self.filter_boxes(confidence_cutoff, boxes, scores, classes)
+
         #
         # # The current box coordinates are normalized to a range between 0 and 1.
         # # This converts the coordinates actual location on the image.
@@ -126,10 +148,13 @@ class TLClassifier(object):
             3: "TrafficLight.YELLOW",
             }
 
+        # if classes[0] != 3:
+        #     print("!!! incorrect: original classes/scores: ",classes,scores)
         class_result = switcher.get(classes[0], "TrafficLight.UNKNOWN")
-        print('####classification class = %d', class_result)
-        end = datetime.datetime.now()
-        print('-- total time', (end-start).total_seconds())
+
+        # print('####classification class = %d', class_result)
+        # end = datetime.datetime.now()
+        # print('-- total time', (end-start).total_seconds())
         return class_result
 
 
