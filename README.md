@@ -1,4 +1,5 @@
 # Programming a Real Self-Driving Car
+[![Udacity - Self-Driving Car NanoDegree](https://s3.amazonaws.com/udacity-sdc/github/shield-carnd.svg)](http://www.udacity.com/drive)
 # Team Aurora
 - Ying LI	: liyingcmu@gmail.com
 - Christian Welling	: csw73@cornell.edu			
