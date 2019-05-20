@@ -11,7 +11,7 @@
 # Description
 This project is to implement a self-driving car system with ROS to run in both simulator and Udacity’s self-driving car - Carla.
 
-# Architecuture
+# Architecture
 Implemented ROS nodes for core functionality of the autonomous vehicle system:
 - waypoint following,
 - control,
@@ -41,4 +41,5 @@ roslaunch launch/site.launch
 ```
 
 # Learnings
-1. In Udacity workspace simulator, there is always obvious lagging when camera is on. This seems to be due to workspace resource constraint. The solution is to set up local simulator enviroment.  Several members in our team have done this successfully.
+## 1. Working Environments 
+In Udacity workspace simulator, our team has experienced obvious lagging when camera is on. This seems to be due to workspace resource constraint. The solution was to set up a local simulator environment.  There are several ways to go. One can setup a native linux installation with both, simulator and ROS environment, running on the same machine.
