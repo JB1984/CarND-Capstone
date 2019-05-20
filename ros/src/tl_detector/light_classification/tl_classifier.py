@@ -11,8 +11,10 @@ class TLClassifier(object):
     def __init__(self, is_site):
         #TODO load classifier
         if is_site:
-            self.SSD_GRAPH_FILE_PATH = rospy.get_param('~/site_model_path', "not found")
+            self.SSD_GRAPH_FILE_PATH = r'../models/ssd_udacity/frozen_inference_graph.pb'
+            #self.SSD_GRAPH_FILE_PATH = rospy.get_param('~/site_model_path', "not found")
         else:
+            #self.SSD_GRAPH_FILE_PATH = r'../models/ssd_sim/frozen_inference_graph_2.pb'
             self.SSD_GRAPH_FILE_PATH = rospy.get_param('~/sim_model_path', "not found")
         rospy.logdebug('#### is_site %s? SSD_GRAPH_FILE_PATH read = %s',is_site, self.SSD_GRAPH_FILE_PATH)
 

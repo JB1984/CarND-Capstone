@@ -14,7 +14,7 @@ import cv2
 import yaml
 
 STATE_COUNT_THRESHOLD = 3
-GAP = 10
+GAP = 3   # Others: 10, Christian: 3
 
 class TLDetector(object):
     def __init__(self):
@@ -46,7 +46,8 @@ class TLDetector(object):
 
         config_string = rospy.get_param("/traffic_light_config")
         self.config = yaml.load(config_string)
-        self.is_site =self.config['is_site']
+        #self.is_site =self.config['is_site']
+        self.is_site = False
         self.upcoming_red_light_pub = rospy.Publisher('/traffic_waypoint', Int32, queue_size=1)
 
         self.bridge = CvBridge()

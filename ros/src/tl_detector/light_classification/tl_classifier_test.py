@@ -8,9 +8,16 @@ import cv2
 class TLClassifier(object):
     def __init__(self):
         #TODO load classifier
-        self.SSD_SIM_FILE_PATH = '../models/ssd_sim/frozen_inference_graph.pb'
-        self.SSD_TESTAREA_FILE = '../models/ssd_udacity/frozen_inference_graph.pb'
+        self.SSD_SIM_FILE_PATH = r'../models/ssd_sim/frozen_inference_graph_2.pb'
+        self.SSD_TESTAREA_FILE = r'../models/ssd_udacity/frozen_inference_graph.pb'
         print('TLClassifier')
+
+        # Testing File Path Works [CONFIRM WORKS]
+        self.test_path = '../models/test_1.txt'
+        with open(self.test_path, "r") as f:
+            for line in f:
+                print(line)
+
         # sim_model_path = rospy.get_param('~/sim_model_path', "not found")
         self.detection_graph = self.load_graph(self.SSD_SIM_FILE_PATH)
         self.image_tensor = self.detection_graph.get_tensor_by_name('image_tensor:0')
@@ -40,11 +47,6 @@ class TLClassifier(object):
         print('classfiy green')
         img_binary = Image.open(green_image_path)
         self.get_classification(img_binary)
-        
-        
-        
-
-
 
     def filter_boxes(self,min_score, boxes, scores, classes):
         """Return boxes with a confidence >= `min_score`"""
