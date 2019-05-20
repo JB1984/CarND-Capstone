@@ -9,22 +9,10 @@ import datetime
 class TLClassifier(object):
     def __init__(self):
         #TODO load classifier
-<<<<<<< HEAD
-        self.SSD_SIM_FILE_PATH = r'../models/ssd_sim/frozen_inference_graph_2.pb'
-        self.SSD_TESTAREA_FILE = r'../models/ssd_udacity/frozen_inference_graph.pb'
-        print('TLClassifier')
-
-        # Testing File Path Works [CONFIRM WORKS]
-        self.test_path = '../models/test_1.txt'
-        with open(self.test_path, "r") as f:
-            for line in f:
-                print(line)
-=======
         self.SSD_SIM_FILE_PATH = '../models/ssd_sim/frozen_inference_graph.pb'
         self.SSD_TESTAREA_FILE = '../models/ssd_udacity/frozen_inference_graph.pb'
         test_color = "Unknown"
         dir_path = '../alex-lechner-udacity-traffic-light-dataset/simulator_dataset_rgb/'+test_color
->>>>>>> 9bc61a3c9e7a8c12e0a1331abd739caa28cea57e
 
         # sim_model_path = rospy.get_param('~/sim_model_path', "not found")
         self.detection_graph = self.load_graph(self.SSD_SIM_FILE_PATH)
@@ -39,24 +27,6 @@ class TLClassifier(object):
 
         # The classification of the object (integer id).
         self.detection_classes = self.detection_graph.get_tensor_by_name('detection_classes:0')
-<<<<<<< HEAD
-        red_image_path = '../models/camera_images/red_0.png'
-        green_image_path = '../models/camera_images/green_2.png'
-        yellow_image_path = '../models/camera_images/yellow_1.png'
-        print('classfiy red')
-        img_binary = Image.open(red_image_path)
-
-        # img_binary = cv2.imread(image_path)
-        # image = cv2.cvtColor(img_binary, cv2.COLOR_BGR2RGB)
-        self.get_classification(img_binary)
-        print('classfiy yellow')
-        img_binary = Image.open(yellow_image_path)
-        self.get_classification(img_binary)
-        
-        print('classfiy green')
-        img_binary = Image.open(green_image_path)
-        self.get_classification(img_binary)
-=======
         self.sess = tf.Session(graph=self.detection_graph)
         # red_image_path = '../models/camera_images/red_0.png'
         # green_image_path = '../models/camera_images/green_2.png'
@@ -93,12 +63,6 @@ class TLClassifier(object):
 
         print(test_color,"=======correct/cnt", correct_cnt, cnt)
 
-
-
-
-
-
->>>>>>> 9bc61a3c9e7a8c12e0a1331abd739caa28cea57e
 
     def filter_boxes(self,min_score, boxes, scores, classes):
         """Return boxes with a confidence >= `min_score`"""

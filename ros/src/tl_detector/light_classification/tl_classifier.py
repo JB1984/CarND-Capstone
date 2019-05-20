@@ -11,8 +11,8 @@ class TLClassifier(object):
     def __init__(self, is_site):
         #TODO load classifier
         if is_site:
-            self.SSD_GRAPH_FILE_PATH = r'../models/ssd_udacity/frozen_inference_graph.pb'
-            #self.SSD_GRAPH_FILE_PATH = rospy.get_param('~/site_model_path', "not found")
+            #self.SSD_GRAPH_FILE_PATH = r'../models/ssd_udacity/frozen_inference_graph.pb'
+            self.SSD_GRAPH_FILE_PATH = rospy.get_param('~/site_model_path', "not found")
         else:
             #self.SSD_GRAPH_FILE_PATH = r'../models/ssd_sim/frozen_inference_graph_2.pb'
             self.SSD_GRAPH_FILE_PATH = rospy.get_param('~/sim_model_path', "not found")
@@ -93,14 +93,14 @@ class TLClassifier(object):
         # Filter boxes with a confidence score less than `confidence_cutoff`
         boxes, scores, classes = self.filter_boxes(confidence_cutoff, boxes, scores, classes)
         if len(classes) == 0:
-            return TrafficLight.UNKNOWN
+            return TrafficLight.RED
         switcher = {
             1: TrafficLight.GREEN,
             2: TrafficLight.RED,
             3: TrafficLight.YELLOW,
             }
 
-        class_result = switcher.get(classes[0], TrafficLight.UNKNOWN)
+        class_result = switcher.get(classes[0], TrafficLight.RED)
         rospy.logdebug('get_classification end class = %d', class_result)
         # end = datetime.datetime.now()
         # c = end - start
