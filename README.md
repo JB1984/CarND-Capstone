@@ -42,4 +42,4 @@ roslaunch launch/site.launch
 
 # Learnings
 ## 1. Working Environments 
-In Udacity workspace simulator, our team has experienced obvious lagging when camera is on. This seems to be due to workspace resource constraint. The solution was to set up a local simulator environment.  There are several ways to go. One can setup a native linux installation with both, simulator and ROS environment, running on the same machine.
+In Udacity workspace simulator, our team has experienced obvious lagging when camera is on. This seems to be due to workspace resource constraint. The solution was to set up a local simulator environment.  There are several ways to go. One can setup a native linux installation with both, simulator and ROS environment, running on the same machine. Because our team had no option to setup a complete native linux installation, our way to go was using a docker installation and also the provided virtual machine. 
